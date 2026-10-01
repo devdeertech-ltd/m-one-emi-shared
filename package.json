@@ -1,13 +1,16 @@
 {
-  "name": "m-one-emi-shared",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "@mone/shared",
+  "version": "0.0.0",
+  "description": "Shared types, zod schemas, and design tokens",
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -w -p tsconfig.json"
   },
-  "keywords": [],
-  "type": "commonjs",
+  "keywords": [], 
   "devDependencies": {
     "@biomejs/biome": "^2.5.15",
     "typescript": "^7.0.2"
