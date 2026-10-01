@@ -1,2 +1,5 @@
+// m-one-emi-shared/src/index.ts
 export const SHARED_VERSION = "0.0.0";
-// error codes, zod schemas, and types land here (BE-01+)
+export * from "./errors.js";
+export * from "./types.js";
+export * from "./schemas/index.js";
