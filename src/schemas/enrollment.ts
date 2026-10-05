@@ -7,6 +7,12 @@ export const CreateEnrollmentSchema = z.object({
 });
 export type CreateEnrollmentDto = z.infer<typeof CreateEnrollmentSchema>;
 
+// POST /customers/:id/enrollment (ensure) and /regenerate
+export const EnsureEnrollmentSchema = z.object({
+  expiresInHours: z.number().int().positive().max(720).optional(),
+});
+export type EnsureEnrollmentDto = z.infer<typeof EnsureEnrollmentSchema>;
+
 export const SelfEnrollSchema = z.object({
   code: z.string().min(4),
   secret: z.string().min(8),

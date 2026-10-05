@@ -7,7 +7,8 @@ export const CreateAreaSchema = z.object({
   parentId: z.string().uuid().optional(),
   centerLat: z.number().min(-90).max(90).optional(),
   centerLng: z.number().min(-180).max(180).optional(),
-  radiusM: z.number().int().positive().optional(),
+  // 1 km .. 500 km
+  radiusM: z.number().int().min(1000).max(500000).optional(),
 });
 export type CreateAreaDto = z.infer<typeof CreateAreaSchema>;
 

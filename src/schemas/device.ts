@@ -11,6 +11,13 @@ export const UpdateDeviceSchema = z.object({
 });
 export type UpdateDeviceDto = z.infer<typeof UpdateDeviceSchema>;
 
+// staff confirms the post-enrollment test (lock / unlock / locate) passed or failed
+export const ConfirmSetupSchema = z.object({
+  passed: z.boolean(),
+  note: z.string().max(500).optional(),
+});
+export type ConfirmSetupDto = z.infer<typeof ConfirmSetupSchema>;
+
 // DPC heartbeat
 export const HeartbeatSchema = z.object({
   lat: z.number().optional(),

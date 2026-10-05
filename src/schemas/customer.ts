@@ -11,6 +11,7 @@ export const CreateCustomerSchema = z.object({
   guarantorName: z.string().optional(),
   guarantorPhone: z.string().optional(),
   guarantorRel: z.string().optional(),
+  guarantorAddress: z.string().max(500).optional(),
 });
 export type CreateCustomerDto = z.infer<typeof CreateCustomerSchema>;
 
@@ -39,6 +40,12 @@ export const EmailChangeConfirmSchema = z.object({
   code: z.string().length(6),
 });
 export type EmailChangeConfirmDto = z.infer<typeof EmailChangeConfirmSchema>;
+
+// replaces the full set of geofence areas a customer's devices must stay inside
+export const CustomerAreasSchema = z.object({
+  areaIds: z.array(z.string().uuid()).max(50),
+});
+export type CustomerAreasDto = z.infer<typeof CustomerAreasSchema>;
 
 export const ConsentSchema = z.object({
   agreementVer: z.string().min(1),

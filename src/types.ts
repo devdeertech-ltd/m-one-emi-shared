@@ -181,7 +181,8 @@ export interface DeviceListItem {
 export interface PlanRow {
   id: string;
   customerId: string;
-  deviceId: string;
+  deviceId: string | null; // null until the customer's phone enrolls
+  deviceModel: string | null;
   commodityPrice: string; // Decimal(12,2)
   downPayment: string;
   financedAmount: string;
@@ -276,11 +277,18 @@ export interface DevicePolicy {
   locked: boolean;
   offlineLockMin: number;
   simLockOnSwap: boolean;
+  /** first fence only; kept for DPC builds that predate `areas` */
   area: {
     centerLat: number | null;
     centerLng: number | null;
     radiusM: number | null;
   } | null;
+  /** every circular fence the device may stay inside (device area + customer areas) */
+  areas: { id: string; centerLat: number; centerLng: number; radiusM: number }[];
+  /** true while the active plan has an overdue installment: leaving ALL areas locks locally */
+  lockOutsideArea: boolean;
+  /** ISO; after this instant the DPC treats the plan as overdue even while offline */
+  overdueFrom: string | null;
 }
 export interface HeartbeatResult {
   simChanged: boolean;
