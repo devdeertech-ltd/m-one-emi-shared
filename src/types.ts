@@ -58,6 +58,7 @@ export const DEVICE_STATUS_VALUES = [
   "released",
   "lost",
   "retired",
+  "cancelled",
 ] as const;
 export type DeviceStatus = (typeof DEVICE_STATUS_VALUES)[number];
 
@@ -105,6 +106,7 @@ export const COMMAND_TYPE_VALUES = [
   "SET_MESSAGE",
   "SYNC_POLICY",
   "SET_GEOFENCE",
+  "ALERT",
   "RELEASE",
   "REBOOT",
   "WIPE_DISALLOW_TOGGLE",
@@ -137,11 +139,23 @@ export const OTP_PURPOSE_VALUES = [
   "email_change",
   "admin_reset",
   "customer_activate",
+  "vendor_verify",
+  "vendor_reset",
 ] as const;
 export type OtpPurpose = (typeof OTP_PURPOSE_VALUES)[number];
 
-export const APP_KIND_VALUES = ["dpc", "staff_app"] as const;
+export const APP_KIND_VALUES = ["dpc", "staff_app", "vendor_app"] as const;
 export type AppKind = (typeof APP_KIND_VALUES)[number];
+
+// r3 vendor SaaS enums (byte-identical to server schema)
+export const VENDOR_STATUS_VALUES = ["active", "suspended", "banned"] as const;
+export type VendorStatus = (typeof VENDOR_STATUS_VALUES)[number];
+
+export const CREDIT_TXN_TYPE_VALUES = ["grant", "consume", "refund", "adjust"] as const;
+export type CreditTxnType = (typeof CREDIT_TXN_TYPE_VALUES)[number];
+
+export const PLATFORM_ROLE_VALUES = ["platform_admin"] as const;
+export type PlatformRole = (typeof PLATFORM_ROLE_VALUES)[number];
 
 /* ────────────────────────────────────────────────────────────
  * RESPONSE VIEW-MODELS — match actual server service returns.
@@ -162,7 +176,6 @@ export interface CustomerListItem {
 /** device list rows (device.service.ts#list over the Device model, Decimal→string, dates ISO). */
 export interface DeviceListItem {
   id: string;
-  orgId: string;
   customerId: string | null;
   imei: string | null;
   serial: string | null;
@@ -293,4 +306,94 @@ export interface DevicePolicy {
 export interface HeartbeatResult {
   simChanged: boolean;
   policy: DevicePolicy;
+}
+
+
+
+/* ────────────────────────────────────────────────────────────
+ * r3 vendor SaaS view-models (match server service returns)
+ * ──────────────────────────────────────────────────────────── */
+
+/** admin.service#listVendors row. */
+export interface VendorListItem {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  status: VendorStatus;
+  couponBalance: number;
+  deviceLimit: number;
+  userCount: number;
+  activeDevices: number;
+  createdAt: string; // ISO
+}
+
+/** admin.service#getVendor — vendor row + counts. */
+export interface VendorDetail {
+  id: string;
+  name: string;
+  slug: string;
+  email: string;
+  phone: string | null;
+  status: VendorStatus;
+  couponBalance: number;
+  deviceLimit: number;
+  bannedAt: string | null;
+  bannedReason: string | null;
+  createdAt: string;
+  updatedAt: string;
+  counts: { users: number; devices: number; activeDevices: number };
+}
+
+/** credit.service#vendorCredit (GET /vendor/credit). */
+export interface VendorCredit {
+  couponBalance: number;
+  deviceLimit: number;
+  status: VendorStatus;
+  activeDevices: number;
+}
+
+/** vendor-auth#me (GET /vendor/me). */
+export interface VendorMe {
+  user: { id: string; name: string; email: string; phone: string | null };
+  vendor: {
+    id: string;
+    name: string;
+    slug: string;
+    phone: string | null;
+    couponBalance: number;
+    deviceLimit: number;
+    status: VendorStatus;
+  };
+}
+
+/** credit_package row (GET /packages, admin packages). */
+export interface CreditPackage {
+  id: string;
+  name: string;
+  priceBdt: number;
+  deviceCount: number;
+  isActive: boolean;
+  sortOrder: number;
+}
+
+/** coupon_ledger row (GET /vendor/credit/ledger, admin ledger). */
+export interface CouponLedgerItem {
+  id: string;
+  type: CreditTxnType;
+  delta: number;
+  balanceAfter: number;
+  deviceId: string | null;
+  purchaseId: string | null;
+  actorId: string | null;
+  reason: string | null;
+  createdAt: string; // ISO
+}
+
+/** per-device circular geofence (device detail / user page). */
+export interface DeviceGeofence {
+  enabled: boolean;
+  centerLat: number | null;
+  centerLng: number | null;
+  radiusM: number | null;
 }

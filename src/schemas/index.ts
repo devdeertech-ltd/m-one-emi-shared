@@ -10,3 +10,6 @@ export * from "./command.js";
 export * from "./geofence.js";
 export * from "./staff.js";
 export * from "./release.js";
+export * from "./vendor.js";
+export * from "./credit.js";
+export * from "./control.js";
