@@ -5,8 +5,6 @@
  * Lowercase except CommandType and GeoEvent (UPPERCASE in schema).
  * ──────────────────────────────────────────────────────────── */
 
-export const STAFF_ROLE_VALUES = ["admin", "moderator"] as const;
-export type StaffRole = (typeof STAFF_ROLE_VALUES)[number];
 
 export const CUSTOMER_STATUS_VALUES = [
   "pending",
@@ -322,7 +320,6 @@ export interface VendorListItem {
   phone: string | null;
   status: VendorStatus;
   couponBalance: number;
-  deviceLimit: number;
   userCount: number;
   activeDevices: number;
   createdAt: string; // ISO
@@ -337,7 +334,6 @@ export interface VendorDetail {
   phone: string | null;
   status: VendorStatus;
   couponBalance: number;
-  deviceLimit: number;
   bannedAt: string | null;
   bannedReason: string | null;
   createdAt: string;
@@ -348,7 +344,6 @@ export interface VendorDetail {
 /** credit.service#vendorCredit (GET /vendor/credit). */
 export interface VendorCredit {
   couponBalance: number;
-  deviceLimit: number;
   status: VendorStatus;
   activeDevices: number;
 }
@@ -362,7 +357,6 @@ export interface VendorMe {
     slug: string;
     phone: string | null;
     couponBalance: number;
-    deviceLimit: number;
     status: VendorStatus;
   };
 }
