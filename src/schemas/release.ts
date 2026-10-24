@@ -1,7 +1,7 @@
 // m-one-emi-shared/src/schemas/release.ts
 import { z } from "zod";
 
-export const AppSchema = z.enum(["dpc", "staff_app"]);
+export const AppSchema = z.enum(["dpc", "vendor_app"]);
 export type AppDto = z.infer<typeof AppSchema>;
 
 export const UploadMetaSchema = z.object({

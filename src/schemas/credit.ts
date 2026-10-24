@@ -10,7 +10,6 @@ export const GrantCreditSchema = z.object({
 });
 export const SetCreditSchema = z.object({
   couponBalance: z.number().int().nonnegative().optional(),
-  deviceLimit: z.number().int().nonnegative().optional(),
 });
 export const CreditPackageSchema = z.object({
   name: z.string().min(1).max(60),
